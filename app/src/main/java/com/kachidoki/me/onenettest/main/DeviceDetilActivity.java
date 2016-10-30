@@ -9,7 +9,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,6 +21,7 @@ import com.chinamobile.iot.onenet.OneNetResponse;
 import com.chinamobile.iot.onenet.ResponseListener;
 import com.google.gson.Gson;
 import com.kachidoki.me.onenettest.R;
+import com.kachidoki.me.onenettest.app.App;
 import com.kachidoki.me.onenettest.config.API;
 import com.kachidoki.me.onenettest.model.bean.Datastreams;
 import com.kachidoki.me.onenettest.model.bean.DeviceDetil;
@@ -35,7 +38,9 @@ public class DeviceDetilActivity extends AppCompatActivity {
     private SuperRecyclerView recyclerView;
     TextView tv_devicetitle;
     TextView tv_safe;
+    Switch aSwitch;
     final DeviceDetilAdapter adapter = new DeviceDetilAdapter();
+    private ImageView imageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,8 +49,54 @@ public class DeviceDetilActivity extends AppCompatActivity {
         recyclerView = (SuperRecyclerView) findViewById(R.id.recyclerview_detil);
         tv_safe = (TextView) findViewById(R.id.device_safe);
         tv_devicetitle = (TextView) findViewById(R.id.deviceDetil_title);
+        aSwitch = (Switch) findViewById(R.id.swich);
+        imageView = (ImageView) findViewById(R.id.finsh);
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         SetData();
         InitRecyclerView();
+        aSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                final Intent intent = DeviceDetilActivity.this.getIntent();
+                if (isChecked){
+                    OneNetApi.getInstance(DeviceDetilActivity.this).sendToEdp(API.APIKey,intent.getStringExtra("id"),"{SWITCH0}", new ResponseListener() {
+                        @Override
+                        public void onResponse(OneNetResponse response) {
+                            Toast.makeText(DeviceDetilActivity.this,"设备打开",Toast.LENGTH_SHORT).show();
+                        }
+
+                        @Override
+                        public void onError(OneNetError error) {
+                            Toast.makeText(DeviceDetilActivity.this,"出错啦",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(DeviceDetilActivity.this,error+"",Toast.LENGTH_SHORT).show();
+                            aSwitch.setChecked(false);
+
+                        }
+                    });
+                }else {
+                    OneNetApi.getInstance(DeviceDetilActivity.this).sendToEdp(API.APIKey,intent.getStringExtra("id"),"{SWITCH1}", new ResponseListener() {
+                        @Override
+                        public void onResponse(OneNetResponse response) {
+                            Toast.makeText(DeviceDetilActivity.this,"设备打开",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(DeviceDetilActivity.this,response+"",Toast.LENGTH_SHORT).show();
+                        }
+
+                        @Override
+                        public void onError(OneNetError error) {
+                            Toast.makeText(DeviceDetilActivity.this,"出错啦",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(DeviceDetilActivity.this,error.getMessage()+"",Toast.LENGTH_SHORT).show();
+                            aSwitch.setChecked(true);
+                        }
+                    });
+                }
+            }
+        });
+
     }
 
     private void InitRecyclerView() {
@@ -152,6 +203,13 @@ public class DeviceDetilActivity extends AppCompatActivity {
             }
             if (datastreams.getId().equals("设备状态")){
                 img_icon.setImageResource(R.drawable.workstatue);
+                if (datastreams.getCurrent_value().equals("1")){
+                    tv_current.setText("已打开");
+                    aSwitch.setChecked(true);
+                }else {
+                    tv_current.setText("已关闭");
+                    aSwitch.setChecked(false);
+                }
             }
 
 

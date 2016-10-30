@@ -13,6 +13,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -44,7 +46,6 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        setToolbar(true);
         recyclerView = (SuperRecyclerView) findViewById(R.id.recyclerview);
         InitRecyclerView();
     }
@@ -130,7 +131,7 @@ public class MainActivity extends BaseActivity {
         }
         @Override
         public DeviceVH onCreateViewHolder(ViewGroup viewGroup, int i) {
-            View view = LayoutInflater.from(MainActivity.this).inflate(R.layout.devicerecycle_view, viewGroup, false);
+            View view = LayoutInflater.from(MainActivity.this).inflate(R.layout.devicecard_view, viewGroup, false);
             return new DeviceVH(view);
         }
 

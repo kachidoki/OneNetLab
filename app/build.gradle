@@ -25,5 +25,6 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.1.0'
     compile 'com.github.cm-heclouds:AndroidSDK:1.0'
     compile 'com.malinskiy:superrecyclerview:1.1.0'
+    compile 'com.android.support:cardview-v7:23.1.1'
     compile files('libs/gson-2.2.4.jar')
 }
