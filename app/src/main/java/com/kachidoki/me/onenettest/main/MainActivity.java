@@ -37,6 +37,7 @@ import java.util.Arrays;
 public class MainActivity extends BaseActivity {
 
     private SuperRecyclerView recyclerView;
+    private TextView deviceCount;
     final DeviceAdapther mAdapter = new DeviceAdapther();
     private int page = 1;
 
@@ -47,6 +48,7 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         recyclerView = (SuperRecyclerView) findViewById(R.id.recyclerview);
+        deviceCount= (TextView) findViewById(R.id.Main_deviceCount);
         InitRecyclerView();
     }
 
@@ -59,6 +61,11 @@ public class MainActivity extends BaseActivity {
             public void onResponse(OneNetResponse response) {
                 final DeviceList.DeviceListWrapper deviceListWrapper = new Gson().fromJson(response.getData(), DeviceList.DeviceListWrapper.class);
                 mAdapter.add(deviceListWrapper.getDevices());
+                if (deviceListWrapper.getDevices()!=null){
+                    deviceCount.setText(""+deviceListWrapper.getTotal_count());
+                }else {
+                    deviceCount.setText("0");
+                }
             }
 
             @Override
@@ -76,11 +83,17 @@ public class MainActivity extends BaseActivity {
 
                     @Override
                     public void onResponse(OneNetResponse response) {
+                        Log.e("API_DEVICE",response.getData());
                         final DeviceList.DeviceListWrapper deviceListWrapper = new Gson().fromJson(response.getData(), DeviceList.DeviceListWrapper.class);
                         page = 1;
                         recyclerView.showRecycler();
                         mAdapter.deviceLists.clear();
                         mAdapter.add(deviceListWrapper.getDevices());
+                        if (deviceListWrapper.getDevices()!=null){
+                            deviceCount.setText(deviceListWrapper.getTotal_count());
+                        }else {
+                            deviceCount.setText("0");
+                        }
                     }
 
                     @Override
@@ -148,18 +161,26 @@ public class MainActivity extends BaseActivity {
 
     class DeviceVH extends RecyclerView.ViewHolder{
         TextView tv_title;
-        TextView tv_describe;
-        ImageView img_device;
+        TextView tv_time;
+        TextView tv_isOnlion;
+        TextView tv_Socre;
 
         public DeviceVH(View itemView) {
             super(itemView);
-            tv_title = (TextView) itemView.findViewById(R.id.device_title);
-            tv_describe = (TextView) itemView.findViewById(R.id.device_describe);
+            tv_title = (TextView) itemView.findViewById(R.id.deviceList_title);
+            tv_time = (TextView) itemView.findViewById(R.id.deviceList_create_time);
+            tv_isOnlion = (TextView) itemView.findViewById(R.id.deviceList_isOnline);
+            tv_Socre = (TextView) itemView.findViewById(R.id.deviceList_score);
         }
 
         public void setData(final DeviceList deviceList){
             tv_title.setText(deviceList.getTitle());
-            tv_describe.setText(deviceList.getDesc());
+            tv_time.setText(deviceList.getCreate_time());
+            if (deviceList.getOnline()){
+                tv_isOnlion.setVisibility(View.VISIBLE);
+            }else {
+                tv_isOnlion.setVisibility(View.GONE);
+            }
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

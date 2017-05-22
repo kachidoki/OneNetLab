@@ -21,9 +21,7 @@ import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
-import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.google.gson.Gson;
 import com.kachidoki.me.onenettest.R;
 import com.kachidoki.me.onenettest.app.BaseActivity;
@@ -39,7 +37,7 @@ import java.util.ArrayList;
 public class DatastreamChartActivity extends BaseActivity {
 
     private LineChart mLineChart;
-    ArrayList<Entry> y = new ArrayList<Entry>();
+    ArrayList<Entry> y = new ArrayList<>();
 
     private  String DeviceId ;
 

@@ -108,12 +108,12 @@ public class DeviceDetilActivity extends AppCompatActivity {
             @Override
             public void onResponse(OneNetResponse response) {
                 final Datastreams.datastreamsWraper datastreams =  new Gson().fromJson(response.getRawResponse(), Datastreams.datastreamsWraper.class);
+                Log.e("DataStreamsTest",response.getRawResponse());
                 if (datastreams.getdata()!=null){
-                    List<Datastreams> newdata = new ArrayList<Datastreams>();
-                    for(int i=0;i<datastreams.getdata().length;i++){
-                        if (!datastreams.getdata()[i].getId().equals("安全指数")){
-                            newdata.add(datastreams.getdata()[i]);
-//                            Log.i("test",datastreams.getdata()[i].getId());
+                    List<Datastreams> newdata = new ArrayList<>();
+                    for(Datastreams data:datastreams.getdata()){
+                        if (!data.getId().equals("安全指数")&&!data.getId().equals("开关状态")){
+                            newdata.add(data);
                         }
 
                     }

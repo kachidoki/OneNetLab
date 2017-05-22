@@ -9,7 +9,7 @@ public class DeviceList {
     private String desc;
     private String protocol;
     private String route_to;
-    private String online;
+    private boolean online;
     private String[] tags;
     private String create_time;
     private Location location;
@@ -47,11 +47,11 @@ public class DeviceList {
         this.protocol = protocol;
     }
 
-    public String getOnline() {
+    public boolean getOnline() {
         return online;
     }
 
-    public void setOnline(String online) {
+    public void setOnline(boolean online) {
         this.online = online;
     }
 

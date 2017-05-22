@@ -51,7 +51,7 @@
                     android:gravity="center"
                     android:layout_width="90dp"
                     android:layout_height="90dp"
-                    android:id="@+id/device_safe"
+                    android:id="@+id/Main_deviceCount"
                     android:text="1"
                     android:textSize="80dp"
                     android:textColor="#ffff"/>
