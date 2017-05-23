@@ -127,71 +127,6 @@ public class DeviceDetil {
     }
 
 
-    public static class Datastreams{
-        private String create_time;
-        private String update_at;
-        private String current_value;
-        private String id;
-        private String unit;
-        private String unit_symbol;
-        private String uuid;
-
-        public String getCreate_time() {
-            return create_time;
-        }
-
-        public void setCreate_time(String create_time) {
-            this.create_time = create_time;
-        }
-
-        public String getId() {
-            return id;
-        }
-
-        public void setId(String id) {
-            this.id = id;
-        }
-
-        public String getUnit() {
-            return unit;
-        }
-
-        public void setUnit(String unit) {
-            this.unit = unit;
-        }
-
-        public String getUnit_symbol() {
-            return unit_symbol;
-        }
-
-        public void setUnit_symbol(String unit_symbol) {
-            this.unit_symbol = unit_symbol;
-        }
-
-        public String getUuid() {
-            return uuid;
-        }
-
-        public void setUuid(String uuid) {
-            this.uuid = uuid;
-        }
-
-        public String getUpdate_at() {
-            return update_at;
-        }
-
-        public void setUpdate_at(String update_at) {
-            this.update_at = update_at;
-        }
-
-        public String getCurrent_value() {
-            return current_value;
-        }
-
-        public void setCurrent_value(String current_value) {
-            this.current_value = current_value;
-        }
-    }
 
     public static class Key{
         private String title;
@@ -289,7 +224,7 @@ public class DeviceDetil {
     public class DeviceDetilWrapper{
         private int errno;
         private String error;
-        private List<DeviceDetil> data;
+        private DeviceDetil data;
 
         public int getErrno() {
             return errno;
@@ -308,11 +243,11 @@ public class DeviceDetil {
         }
 
 
-        public List<DeviceDetil> getData() {
+        public DeviceDetil getData() {
             return data;
         }
 
-        public void setData(List<DeviceDetil> data) {
+        public void setData(DeviceDetil data) {
             this.data = data;
         }
     }

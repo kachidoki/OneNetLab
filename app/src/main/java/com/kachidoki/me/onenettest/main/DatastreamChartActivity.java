@@ -1,5 +1,6 @@
 package com.kachidoki.me.onenettest.main;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -29,6 +30,7 @@ import com.kachidoki.me.onenettest.config.API;
 import com.kachidoki.me.onenettest.model.bean.DataPoints;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Frank on 16/8/15.
@@ -37,12 +39,16 @@ import java.util.ArrayList;
 public class DatastreamChartActivity extends BaseActivity {
 
     private LineChart mLineChart;
-    ArrayList<Entry> y = new ArrayList<>();
+    List<Entry> y = new ArrayList<>();
 
-    private  String DeviceId ;
+    private String DeviceId;
+    private String StreamsId;
 
     private Handler handler;
     private ImageView imageView;
+
+    public static final String DeviceID="DeviceId";
+    public static final String SteamsID="SteamsId";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -57,25 +63,18 @@ public class DatastreamChartActivity extends BaseActivity {
             }
         });
         final Intent intent = getIntent();
-        DeviceId= intent.getStringExtra("id");
+        DeviceId= intent.getStringExtra(DeviceID);
+        StreamsId= intent.getStringExtra(SteamsID);
 
-        Log.e("Thread","OnCreate thread "+Thread.currentThread().getId());
-
-//        new BackAsync().execute();
         setChartStyle(mLineChart);
 
-        OneNetApi.getInstance(DatastreamChartActivity.this).getDatapoints(API.APIKey, API.mTempDeviceId ,DeviceId ,null, null, "10", null, null, new ResponseListener() {
-
+        OneNetApi.getInstance(DatastreamChartActivity.this).getDatapoints(API.APIKey, DeviceId,StreamsId,null, null, "10", null, null, new ResponseListener() {
 
             @Override
             public void onResponse(OneNetResponse oneNetResponse) {
-
-                Log.e("Thread","OnResponse thread "+Thread.currentThread().getId());
-
                 final DataPoints.Data data = new Gson().fromJson(oneNetResponse.getData(), DataPoints.Data.class);
                 for (int i=0;i<data.getDatastreams()[0].getDataPoints().length;i++){
                     y.add(new Entry(i,Float.parseFloat(data.getDatastreams()[0].getDataPoints()[i].getValue())));
-                    Log.i("test","doInBackGround:--> x = "+y.get(i).getX()+"y = "+y.get(i).getY());
                 }
                 handler.sendEmptyMessage(1);
             }
@@ -92,7 +91,13 @@ public class DatastreamChartActivity extends BaseActivity {
                 makeLineData();
             }
         };
+    }
 
+    public static void goToChart(Context context,String deviceId,String dataStreams){
+        Intent intent = new Intent(context,DatastreamChartActivity.class);
+        intent.putExtra(SteamsID,dataStreams);
+        intent.putExtra(DeviceID,deviceId);
+        context.startActivity(intent);
     }
 
     // 设置chart显示的样式

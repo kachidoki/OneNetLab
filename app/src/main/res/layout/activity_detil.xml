@@ -16,12 +16,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <ImageView
+                android:padding="2dp"
                 android:layout_gravity="left"
                 android:layout_marginLeft="10dp"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
-                android:id="@+id/finsh"
-                android:background="@drawable/back"/>
+                android:id="@+id/deviceDetil_finsh"
+                android:src="@drawable/back"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -30,12 +31,15 @@
                 android:id="@+id/deviceDetil_title"
                 android:layout_gravity="center_horizontal"
                 android:textSize="22sp"/>
+
             <ImageView
+                android:padding="2dp"
                 android:layout_marginRight="10dp"
                 android:layout_gravity="right"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:background="@drawable/more"/>
+                android:src="@drawable/more"
+                android:id="@+id/deviceDetil_more" />
         </FrameLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -52,7 +56,8 @@
                     android:layout_width="135dp"
                     android:layout_height="90dp"
                     android:id="@+id/device_safe"
-                    android:text="80"
+                    android:gravity="center"
+                    android:text="0"
                     android:textSize="80dp"
                     android:textColor="#ffff"/>
                 <TextView
@@ -69,12 +74,21 @@
                 android:orientation="horizontal"
                 android:layout_gravity="center_horizontal">
                 <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="设备开关"
-                android:textColor="#fff"
-                android:textSize="18dp"/>
+                    android:id="@+id/deviceDetil_isOnline"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:textColor="@android:color/holo_red_light"
+                    android:text=""/>
+                <TextView
+                    android:layout_marginLeft="16dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="设备开关"
+                    android:textColor="#fff"
+                    android:textSize="18dp"/>
                 <Switch
+                    android:layout_marginLeft="8dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/swich"/>

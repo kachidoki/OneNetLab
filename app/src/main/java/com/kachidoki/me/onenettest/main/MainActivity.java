@@ -90,7 +90,7 @@ public class MainActivity extends BaseActivity {
                         mAdapter.deviceLists.clear();
                         mAdapter.add(deviceListWrapper.getDevices());
                         if (deviceListWrapper.getDevices()!=null){
-                            deviceCount.setText(deviceListWrapper.getTotal_count());
+                            deviceCount.setText(""+deviceListWrapper.getTotal_count());
                         }else {
                             deviceCount.setText("0");
                         }
