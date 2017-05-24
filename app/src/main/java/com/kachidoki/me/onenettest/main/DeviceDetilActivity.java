@@ -5,6 +5,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
@@ -33,11 +35,13 @@ import com.chinamobile.iot.onenet.ResponseListener;
 import com.google.gson.Gson;
 import com.kachidoki.me.onenettest.R;
 import com.kachidoki.me.onenettest.app.App;
+import com.kachidoki.me.onenettest.app.BaseActivity;
 import com.kachidoki.me.onenettest.config.API;
 import com.kachidoki.me.onenettest.model.bean.Datastreams;
 import com.kachidoki.me.onenettest.model.bean.DeviceDetil;
 import com.malinskiy.superrecyclerview.SuperRecyclerView;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -46,7 +50,7 @@ import java.util.zip.Inflater;
 /**
  * Created by Frank on 16/6/5.
  */
-public class DeviceDetilActivity extends AppCompatActivity {
+public class DeviceDetilActivity extends BaseActivity {
     private SuperRecyclerView recyclerView;
     TextView tv_devicetitle;
     TextView tv_safe;
@@ -56,14 +60,24 @@ public class DeviceDetilActivity extends AppCompatActivity {
     private ImageView more;
     private TextView isOnlineText;
     private String deviceID;
+    final Gson gson=new Gson();
+    private static final String ID="id";
+    private static final String Title="title";
     private boolean isOnline=false;
+    private final Handler switchHandler=new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            boolean isON=msg.arg1==1;
+            aSwitch.setChecked(isON);
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detil);
         final Intent intent = DeviceDetilActivity.this.getIntent();
-        deviceID=intent.getStringExtra("id");
+        deviceID=intent.getStringExtra(ID);
         recyclerView = (SuperRecyclerView) findViewById(R.id.recyclerview_detil);
         tv_safe = (TextView) findViewById(R.id.device_safe);
         tv_devicetitle = (TextView) findViewById(R.id.deviceDetil_title);
@@ -71,7 +85,7 @@ public class DeviceDetilActivity extends AppCompatActivity {
         back = (ImageView) findViewById(R.id.deviceDetil_finsh);
         more = (ImageView) findViewById(R.id.deviceDetil_more);
         isOnlineText= (TextView) findViewById(R.id.deviceDetil_isOnline);
-        tv_devicetitle.setText(intent.getStringExtra("title"));
+        tv_devicetitle.setText(intent.getStringExtra(Title));
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -93,7 +107,7 @@ public class DeviceDetilActivity extends AppCompatActivity {
         OneNetApi.getInstance(this).getDevice(API.APIKey,deviceID, new ResponseListener() {
             @Override
             public void onResponse(OneNetResponse response) {
-                final DeviceDetil.DeviceDetilWrapper deviceDetil = new Gson().fromJson(response.getRawResponse(),DeviceDetil.DeviceDetilWrapper.class);
+                final DeviceDetil.DeviceDetilWrapper deviceDetil = gson.fromJson(response.getRawResponse(),DeviceDetil.DeviceDetilWrapper.class);
                 isOnline=deviceDetil.getData().isOnline();
                 OnlineIsChange(isOnline);
                 getDataStreams();
@@ -110,14 +124,14 @@ public class DeviceDetilActivity extends AppCompatActivity {
         OneNetApi.getInstance(this).getDatastreams(API.APIKey, deviceID, null, new ResponseListener() {
             @Override
             public void onResponse(OneNetResponse oneNetResponse) {
-                final Datastreams.datastreamsWraper datastreamsWraper =  new Gson().fromJson(oneNetResponse.getRawResponse(), Datastreams.datastreamsWraper.class);
+                final Datastreams.datastreamsWraper datastreamsWraper =  gson.fromJson(oneNetResponse.getRawResponse(), Datastreams.datastreamsWraper.class);
                 if (datastreamsWraper.getdata()!=null){
                     List<Datastreams> newdata = new ArrayList<>();
                     for(Datastreams data:datastreamsWraper.getdata()){
                         if (data.getId().equals("安全指数")){
                             tv_safe.setText(data.getCurrent_value()+"");
                         }else if (data.getId().equals("开关状态")){
-                            aSwitch.setChecked(false);
+
                         }else {
                             newdata.add(data);
                         }
@@ -150,7 +164,7 @@ public class DeviceDetilActivity extends AppCompatActivity {
                         @Override
                         public void onResponse(OneNetResponse response) {
                             Toast.makeText(DeviceDetilActivity.this,"设置成功",Toast.LENGTH_SHORT).show();
-                            NetcheckSwitch();
+                            switchHandler.postDelayed(NetCheckSRUN,5000);
                         }
 
                         @Override
@@ -163,18 +177,22 @@ public class DeviceDetilActivity extends AppCompatActivity {
         }
     }
 
+    final Runnable NetCheckSRUN=new Runnable() {
+        @Override
+        public void run() {
+            NetcheckSwitch();
+        }
+    };
+
     private void NetcheckSwitch(){
         OneNetApi.getInstance(DeviceDetilActivity.this).getDatastream(API.APIKey, deviceID, "开关状态", new ResponseListener() {
             @Override
             public void onResponse(OneNetResponse response) {
-                final Datastreams datastreams = new Gson().fromJson(response.getData(), Datastreams.class);
-                if (datastreams.getCurrent_value().equals("开")){
-                    Log.e("aSwitchTest",datastreams.getCurrent_value()+"");
-                    aSwitch.setChecked(true);
-                }else {
-                    Log.e("aSwitchTest",datastreams.getCurrent_value()+"");
-                    aSwitch.setChecked(false);
-                }
+                final Datastreams datastreams = gson.fromJson(response.getData(), Datastreams.class);
+                boolean isON=datastreams.getCurrent_value().equals("开");
+                Message msg=switchHandler.obtainMessage();
+                msg.arg1=isON?1:0;
+                switchHandler.sendMessage(msg);
             }
 
             @Override
@@ -223,6 +241,10 @@ public class DeviceDetilActivity extends AppCompatActivity {
     }
 
     private void showSetColck(final Context context){
+        if (!isOnline){
+            Toast.makeText(DeviceDetilActivity.this,"请先让设备上线",Toast.LENGTH_LONG).show();
+            return;
+        }
         AlertDialog.Builder builder=new AlertDialog.Builder(context);
         builder.setTitle("设置定时关");
         View view= LayoutInflater.from(context).inflate(R.layout.dialog_clock,null);
@@ -254,6 +276,10 @@ public class DeviceDetilActivity extends AppCompatActivity {
     }
 
     private void showSetWifi(final Context context){
+        if (!isOnline){
+            Toast.makeText(DeviceDetilActivity.this,"请先让设备上线",Toast.LENGTH_LONG).show();
+            return;
+        }
         AlertDialog.Builder builder=new AlertDialog.Builder(context);
         builder.setTitle("设置Wifi");
         View view= LayoutInflater.from(context).inflate(R.layout.dialog_wifi,null);
@@ -313,7 +339,7 @@ public class DeviceDetilActivity extends AppCompatActivity {
 
 
     class DeviceDetilAdapter extends RecyclerView.Adapter<DeviceDetilVH>{
-        private ArrayList<Datastreams> data = new ArrayList<>();
+        private List<Datastreams> data = new ArrayList<>();
 
         public void clear(){
             data.clear();
@@ -334,8 +360,6 @@ public class DeviceDetilActivity extends AppCompatActivity {
                 if (!data.get(position).getId().equals("安全指数")){
                     holder.setData(data.get(position));
                 }
-
-
         }
 
         @Override
@@ -381,4 +405,10 @@ public class DeviceDetilActivity extends AppCompatActivity {
     }
 
 
+    public static void GoDeviceDetil(String id,String title,Context context){
+        Intent intent = new Intent(context,DeviceDetilActivity.class);
+        intent.putExtra(ID,id);
+        intent.putExtra(Title,title);
+        context.startActivity(intent);
+    }
 }

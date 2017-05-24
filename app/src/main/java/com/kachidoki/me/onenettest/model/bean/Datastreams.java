@@ -98,4 +98,33 @@ public class Datastreams{
             this.error = error;
         }
     }
+
+    public class dataSingleWraper{
+        private int errno;
+        private Datastreams data;
+        private String error;
+        public int getErrno() {
+            return errno;
+        }
+
+        public void setErrno(int errno) {
+            this.errno = errno;
+        }
+
+        public String getError() {
+            return error;
+        }
+
+        public void setError(String error) {
+            this.error = error;
+        }
+
+        public Datastreams getData() {
+            return data;
+        }
+
+        public void setData(Datastreams data) {
+            this.data = data;
+        }
+    }
 }

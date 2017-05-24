@@ -1,5 +1,6 @@
 package com.kachidoki.me.onenettest.main;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -27,19 +28,21 @@ import com.google.gson.Gson;
 import com.kachidoki.me.onenettest.R;
 import com.kachidoki.me.onenettest.app.BaseActivity;
 import com.kachidoki.me.onenettest.config.API;
+import com.kachidoki.me.onenettest.model.bean.Datastreams;
 import com.kachidoki.me.onenettest.model.bean.DeviceList;
 import com.malinskiy.superrecyclerview.OnMoreListener;
 import com.malinskiy.superrecyclerview.SuperRecyclerView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class MainActivity extends BaseActivity {
 
     private SuperRecyclerView recyclerView;
     private TextView deviceCount;
     final DeviceAdapther mAdapter = new DeviceAdapther();
-    private int page = 1;
+    final Gson gson=new Gson();
 
 
 
@@ -59,7 +62,8 @@ public class MainActivity extends BaseActivity {
 
             @Override
             public void onResponse(OneNetResponse response) {
-                final DeviceList.DeviceListWrapper deviceListWrapper = new Gson().fromJson(response.getData(), DeviceList.DeviceListWrapper.class);
+                final DeviceList.DeviceListWrapper deviceListWrapper = gson.fromJson(response.getData(), DeviceList.DeviceListWrapper.class);
+                mAdapter.clear();
                 mAdapter.add(deviceListWrapper.getDevices());
                 if (deviceListWrapper.getDevices()!=null){
                     deviceCount.setText(""+deviceListWrapper.getTotal_count());
@@ -79,15 +83,13 @@ public class MainActivity extends BaseActivity {
         recyclerView.setRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                OneNetApi.getInstance(MainActivity.this).getDevices(API.APIKey, page+"", null, null, null, null, null, new ResponseListener() {
+                OneNetApi.getInstance(MainActivity.this).getDevices(API.APIKey,null, null, null, null, null, null, new ResponseListener() {
 
                     @Override
                     public void onResponse(OneNetResponse response) {
-                        Log.e("API_DEVICE",response.getData());
-                        final DeviceList.DeviceListWrapper deviceListWrapper = new Gson().fromJson(response.getData(), DeviceList.DeviceListWrapper.class);
-                        page = 1;
-                        recyclerView.showRecycler();
-                        mAdapter.deviceLists.clear();
+                        final DeviceList.DeviceListWrapper deviceListWrapper = gson.fromJson(response.getData(), DeviceList.DeviceListWrapper.class);
+//                        recyclerView.showRecycler();
+                        mAdapter.clear();
                         mAdapter.add(deviceListWrapper.getDevices());
                         if (deviceListWrapper.getDevices()!=null){
                             deviceCount.setText(""+deviceListWrapper.getTotal_count());
@@ -106,42 +108,21 @@ public class MainActivity extends BaseActivity {
             }
         });
 
-        recyclerView.setOnMoreListener(new OnMoreListener() {
-            @Override
-            public void onMoreAsked(int i, int i1, int i2) {
-                page++;
-                OneNetApi.getInstance(MainActivity.this).getDevices(API.APIKey, page+"", null, null, null, null, null, new ResponseListener() {
-
-                    @Override
-                    public void onResponse(OneNetResponse response) {
-                        final DeviceList.DeviceListWrapper deviceListWrapper = new Gson().fromJson(response.getData(), DeviceList.DeviceListWrapper.class);
-                        recyclerView.showRecycler();
-                        recyclerView.hideMoreProgress();
-                        if (deviceListWrapper.getDevices()!=null){
-                            mAdapter.add(deviceListWrapper.getDevices());
-                        }
-                    }
-
-                    @Override
-                    public void onError(OneNetError error) {
-                        Toast.makeText(MainActivity.this, error.toString(), Toast.LENGTH_SHORT).show();
-                        Log.i("test", error.toString());
-                        // 网络或服务器错误
-                    }
-                });
-            }
-        });
-
     }
 
 
 
     class DeviceAdapther extends RecyclerView.Adapter<DeviceVH>{
-        private ArrayList<DeviceList> deviceLists = new ArrayList<>();
+        private List<DeviceList> deviceLists = new ArrayList<>();
         public void add(DeviceList[] deviceList){
             deviceLists.addAll(Arrays.asList(deviceList));
             notifyDataSetChanged();
         }
+
+        public void clear(){
+            deviceLists.clear();
+        }
+
         @Override
         public DeviceVH onCreateViewHolder(ViewGroup viewGroup, int i) {
             View view = LayoutInflater.from(MainActivity.this).inflate(R.layout.devicecard_view, viewGroup, false);
@@ -164,6 +145,7 @@ public class MainActivity extends BaseActivity {
         TextView tv_time;
         TextView tv_isOnlion;
         TextView tv_Socre;
+        Context context;
 
         public DeviceVH(View itemView) {
             super(itemView);
@@ -171,6 +153,7 @@ public class MainActivity extends BaseActivity {
             tv_time = (TextView) itemView.findViewById(R.id.deviceList_create_time);
             tv_isOnlion = (TextView) itemView.findViewById(R.id.deviceList_isOnline);
             tv_Socre = (TextView) itemView.findViewById(R.id.deviceList_score);
+            context=itemView.getContext();
         }
 
         public void setData(final DeviceList deviceList){
@@ -185,10 +168,21 @@ public class MainActivity extends BaseActivity {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = new Intent(MainActivity.this,DeviceDetilActivity.class);
-                    intent.putExtra("id",deviceList.getId());
-                    intent.putExtra("title",deviceList.getTitle());
-                    startActivity(intent);
+                    DeviceDetilActivity.GoDeviceDetil(deviceList.getId(),deviceList.getTitle(),MainActivity.this);
+                }
+            });
+            OneNetApi.getInstance(context).getDatastream(API.APIKey, deviceList.getId(), "安全指数", new ResponseListener() {
+                @Override
+                public void onResponse(OneNetResponse oneNetResponse) {
+                    Datastreams.dataSingleWraper datastreamsWraper=gson.fromJson(oneNetResponse.getRawResponse(),Datastreams.dataSingleWraper.class);
+                    if (datastreamsWraper.getData()!=null){
+                        tv_Socre.setText(""+datastreamsWraper.getData().getCurrent_value());
+                    }
+                }
+
+                @Override
+                public void onError(OneNetError oneNetError) {
+
                 }
             });
         }

@@ -1,9 +1,11 @@
 package com.kachidoki.me.onenettest.app;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 
-import com.kachidoki.me.onenettest.R;
+
+import java.lang.reflect.Field;
 
 
 /**
@@ -11,15 +13,31 @@ import com.kachidoki.me.onenettest.R;
  */
 
 public class BaseActivity extends AppCompatActivity {
-    private Toolbar toolbar;
-    public Toolbar getToolbar() {
-        return toolbar;
-    }
-    protected void setToolbar(boolean returnable){
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        if(toolbar!=null){
-            setSupportActionBar(toolbar);
-            getSupportActionBar().setDisplayHomeAsUpEnabled(returnable);
+
+    private void releaseHandlers(){
+        try {
+            Class<?> clazz = getClass();
+            Field[] fields = clazz.getDeclaredFields();
+            if (fields == null || fields.length <= 0 ){
+                return;
+            }
+            for (Field field: fields){
+                field.setAccessible(true);
+                if(!Handler.class.isAssignableFrom(field.getType())) continue;
+                Handler handler = (Handler)field.get(this);
+                if (handler != null && handler.getLooper() == Looper.getMainLooper()){
+                    handler.removeCallbacksAndMessages(null);
+                }
+                field.setAccessible(false);
+            }
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        releaseHandlers();
     }
 }
