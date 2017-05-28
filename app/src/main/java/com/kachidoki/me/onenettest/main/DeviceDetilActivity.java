@@ -3,15 +3,12 @@ package com.kachidoki.me.onenettest.main;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -34,18 +31,14 @@ import com.chinamobile.iot.onenet.OneNetResponse;
 import com.chinamobile.iot.onenet.ResponseListener;
 import com.google.gson.Gson;
 import com.kachidoki.me.onenettest.R;
-import com.kachidoki.me.onenettest.app.App;
 import com.kachidoki.me.onenettest.app.BaseActivity;
 import com.kachidoki.me.onenettest.config.API;
 import com.kachidoki.me.onenettest.model.bean.Datastreams;
 import com.kachidoki.me.onenettest.model.bean.DeviceDetil;
 import com.malinskiy.superrecyclerview.SuperRecyclerView;
 
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.zip.Inflater;
 
 /**
  * Created by Frank on 16/6/5.
