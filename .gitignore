@@ -8,4 +8,5 @@
 /captures
 *.jks
 *.apk
+*.iml
 app/src/main/java/com/kachidoki/me/onenettest/config/
