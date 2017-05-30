@@ -1,7 +1,11 @@
 .gradle
 /local.properties
+/keystore.properties
 /.idea/workspace.xml
 /.idea/libraries
 .DS_Store
 /build
 /captures
+*.jks
+*.apk
+app/src/main/java/com/kachidoki/me/onenettest/config/
