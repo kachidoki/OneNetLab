@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -38,6 +39,9 @@ import com.kachidoki.me.onenettest.model.bean.DeviceDetil;
 import com.malinskiy.superrecyclerview.SuperRecyclerView;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -48,6 +52,7 @@ public class DeviceDetilActivity extends BaseActivity {
     TextView tv_devicetitle;
     TextView tv_safe;
     Switch aSwitch;
+    Button search;
     final DeviceDetilAdapter adapter = new DeviceDetilAdapter();
     private ImageView back;
     private ImageView more;
@@ -77,8 +82,15 @@ public class DeviceDetilActivity extends BaseActivity {
         aSwitch = (Switch) findViewById(R.id.swich);
         back = (ImageView) findViewById(R.id.deviceDetil_finsh);
         more = (ImageView) findViewById(R.id.deviceDetil_more);
+        search = (Button) findViewById(R.id.deviceDetil_search);
         isOnlineText= (TextView) findViewById(R.id.deviceDetil_isOnline);
         tv_devicetitle.setText(intent.getStringExtra(Title));
+        search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendSearchCommand();
+            }
+        });
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -129,6 +141,12 @@ public class DeviceDetilActivity extends BaseActivity {
                             newdata.add(data);
                         }
                     }
+                    Collections.sort(newdata, new Comparator<Datastreams>() {
+                        @Override
+                        public int compare(Datastreams lhs, Datastreams rhs) {
+                            return lhs.getId().compareTo(rhs.getId());
+                        }
+                    });
                     adapter.add(newdata);
                 }
             }
@@ -153,11 +171,12 @@ public class DeviceDetilActivity extends BaseActivity {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     Log.e("aSwitchTest",isChecked+"");
+                    switchHandler.removeCallbacksAndMessages(null);
                     OneNetApi.getInstance(DeviceDetilActivity.this).sendToEdp(API.APIKey,deviceID,isChecked?API.COMMAND_ON:API.COMMAND_OFF, new ResponseListener() {
                         @Override
                         public void onResponse(OneNetResponse response) {
                             Toast.makeText(DeviceDetilActivity.this,"设置成功",Toast.LENGTH_SHORT).show();
-                            switchHandler.postDelayed(NetCheckSRUN,5000);
+                            switchHandler.postDelayed(NetCheckSRUN,10000);
                         }
 
                         @Override
@@ -325,6 +344,21 @@ public class DeviceDetilActivity extends BaseActivity {
             public void onError(OneNetError error) {
                 Toast.makeText(DeviceDetilActivity.this,"设置失败",Toast.LENGTH_SHORT).show();
                 Toast.makeText(DeviceDetilActivity.this,error+"",Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void sendSearchCommand(){
+        if (deviceID.isEmpty()) return;
+        OneNetApi.getInstance(DeviceDetilActivity.this).sendToEdp(API.APIKey,deviceID,API.COMMAND_SEARCH,new ResponseListener() {
+            @Override
+            public void onResponse(OneNetResponse response) {
+
+            }
+
+            @Override
+            public void onError(OneNetError error) {
+                Toast.makeText(DeviceDetilActivity.this,"发送失败",Toast.LENGTH_SHORT).show();
             }
         });
     }
