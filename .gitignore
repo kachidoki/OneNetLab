@@ -9,4 +9,5 @@
 *.jks
 *.apk
 *.iml
-app/src/main/java/com/kachidoki/me/onenettest/config/
+/app/src/main/java/com/kachidoki/me/onenettest/OLDAPP/config/API.java
+src/main/java/com/kachidoki/me/onenettest/kotlinNEWAPP/

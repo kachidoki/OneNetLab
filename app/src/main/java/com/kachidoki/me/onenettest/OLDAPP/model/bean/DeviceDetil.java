@@ -1,6 +1,4 @@
-package com.kachidoki.me.onenettest.model.bean;
-
-import java.util.List;
+package com.kachidoki.me.onenettest.OLDAPP.model.bean;
 
 /**
  * Created by Frank on 16/6/4.

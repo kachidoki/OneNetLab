@@ -1,4 +1,4 @@
-package com.kachidoki.me.onenettest.main;
+package com.kachidoki.me.onenettest.OLDAPP.main;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -32,14 +32,13 @@ import com.chinamobile.iot.onenet.OneNetResponse;
 import com.chinamobile.iot.onenet.ResponseListener;
 import com.google.gson.Gson;
 import com.kachidoki.me.onenettest.R;
-import com.kachidoki.me.onenettest.app.BaseActivity;
-import com.kachidoki.me.onenettest.config.API;
-import com.kachidoki.me.onenettest.model.bean.Datastreams;
-import com.kachidoki.me.onenettest.model.bean.DeviceDetil;
+import com.kachidoki.me.onenettest.OLDAPP.app.BaseActivity;
+import com.kachidoki.me.onenettest.OLDAPP.config.API;
+import com.kachidoki.me.onenettest.OLDAPP.model.bean.Datastreams;
+import com.kachidoki.me.onenettest.OLDAPP.model.bean.DeviceDetil;
 import com.malinskiy.superrecyclerview.SuperRecyclerView;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;

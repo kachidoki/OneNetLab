@@ -1,9 +1,8 @@
-package com.kachidoki.me.onenettest.main;
+package com.kachidoki.me.onenettest.OLDAPP.main;
 
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -25,9 +24,9 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.google.gson.Gson;
 import com.kachidoki.me.onenettest.R;
-import com.kachidoki.me.onenettest.app.BaseActivity;
-import com.kachidoki.me.onenettest.config.API;
-import com.kachidoki.me.onenettest.model.bean.DataPoints;
+import com.kachidoki.me.onenettest.OLDAPP.app.BaseActivity;
+import com.kachidoki.me.onenettest.OLDAPP.config.API;
+import com.kachidoki.me.onenettest.OLDAPP.model.bean.DataPoints;
 
 import java.util.ArrayList;
 import java.util.List;

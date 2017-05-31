@@ -1,22 +1,16 @@
-package com.kachidoki.me.onenettest.main;
+package com.kachidoki.me.onenettest.OLDAPP.main;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,11 +20,10 @@ import com.chinamobile.iot.onenet.OneNetResponse;
 import com.chinamobile.iot.onenet.ResponseListener;
 import com.google.gson.Gson;
 import com.kachidoki.me.onenettest.R;
-import com.kachidoki.me.onenettest.app.BaseActivity;
-import com.kachidoki.me.onenettest.config.API;
-import com.kachidoki.me.onenettest.model.bean.Datastreams;
-import com.kachidoki.me.onenettest.model.bean.DeviceList;
-import com.malinskiy.superrecyclerview.OnMoreListener;
+import com.kachidoki.me.onenettest.OLDAPP.app.BaseActivity;
+import com.kachidoki.me.onenettest.OLDAPP.config.API;
+import com.kachidoki.me.onenettest.OLDAPP.model.bean.Datastreams;
+import com.kachidoki.me.onenettest.OLDAPP.model.bean.DeviceList;
 import com.malinskiy.superrecyclerview.SuperRecyclerView;
 
 import java.util.ArrayList;

@@ -10,7 +10,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".main.MainActivity"
+            android:name=".OLDAPP.main.MainActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -19,11 +19,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".main.DeviceDetilActivity"
+            android:name=".OLDAPP.main.DeviceDetilActivity"
             android:label="@string/app_name" >
         </activity>
         <activity
-            android:name=".main.DatastreamChartActivity"
+            android:name=".OLDAPP.main.DatastreamChartActivity"
             android:label="@string/app_name" >
         </activity>
     </application>

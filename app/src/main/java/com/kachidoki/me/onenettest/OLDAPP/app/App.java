@@ -1,4 +1,4 @@
-package com.kachidoki.me.onenettest.app;
+package com.kachidoki.me.onenettest.OLDAPP.app;
 
 import android.app.Application;
 
