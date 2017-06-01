@@ -28,6 +28,8 @@ public class DataPoints  {
 
         private DataPoints[] datapoints;
         private String id;
+
+
         public DataPoints[] getDataPoints() {
             return datapoints;
         }
@@ -48,6 +50,7 @@ public class DataPoints  {
     public class Data{
         private int count;
         private Datastreams[] datastreams;
+
         public Datastreams[] getDatastreams() {
             return datastreams;
         }
@@ -55,11 +58,6 @@ public class DataPoints  {
         public void setDatastreams(Datastreams[] datastreams) {
             this.datastreams = datastreams;
         }
-
-
-
-
-
 
         public int getCount() {
             return count;
