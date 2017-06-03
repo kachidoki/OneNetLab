@@ -31,6 +31,7 @@ ext {
     versionName = "v1"
 
     kotlin_version = '1.1.2'
-
+    daggerLibVersion = '2.7'
+    supportLibVersion = "25.0.0"
 }
 

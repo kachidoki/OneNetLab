@@ -12,8 +12,8 @@ abstract class KBaseActivity<B :ViewDataBinding> :AppCompatActivity(){
 
     lateinit var mBinding:B
 
-    override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
-        super.onCreate(savedInstanceState, persistentState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         mBinding=createDataBinding(savedInstanceState)
         initView()
     }

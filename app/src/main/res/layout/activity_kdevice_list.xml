@@ -65,7 +65,7 @@
                         android:layout_width="90dp"
                         android:layout_height="90dp"
                         android:id="@+id/Kdevicelist_count"
-                        android:text="@{count}"
+                        android:text="@{String.valueOf(count)}"
                         android:textSize="80dp"
                         android:textColor="#ffff"/>
                     <TextView

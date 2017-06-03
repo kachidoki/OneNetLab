@@ -14,10 +14,11 @@ class DeviceListAdapter(private val list:MutableList<DeviceList>):BaseBindingAda
         list.clear()
     }
 
-    fun addAll(nlist:List<DeviceList>){
-        list.addAll(nlist)
+    fun addAll(res:List<DeviceList>){
+        list.addAll(res)
         notifyDataSetChanged()
     }
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DBViewHolder<ItemKdevicelistBinding> {
         return DBViewHolder(
@@ -26,9 +27,9 @@ class DeviceListAdapter(private val list:MutableList<DeviceList>):BaseBindingAda
     }
 
     override fun onBindViewHolder(holder: DBViewHolder<ItemKdevicelistBinding>, position: Int) {
-        super.bindViewHolder(holder,position)
         holder.binding.devicelist=list.get(position)
         holder.binding.executePendingBindings()
+        holder.binding.devicepoint=100
     }
 
     override fun getItemCount() = list.size

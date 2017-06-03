@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
+        android:name=".kotlinNEWAPP.app.KotlinApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -13,11 +14,7 @@
         <activity
             android:name=".OLDAPP.main.MainActivity"
             android:label="@string/app_name">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".OLDAPP.main.DeviceDetilActivity"
@@ -25,7 +22,13 @@
         <activity
             android:name=".OLDAPP.main.DatastreamChartActivity"
             android:label="@string/app_name"></activity>
-        <activity android:name=".kotlinNEWAPP.activity.KDeviceListActivity"></activity>
+        <activity android:name=".kotlinNEWAPP.activity.KDeviceListActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
