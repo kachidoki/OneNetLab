@@ -19,26 +19,26 @@ interface OneNetLocalApi{
 
     fun getDevice(
             deviceId:String,
-            callback:LocalCallBack<DeviceDetilWrapper>
+            callback:LocalCallBack<DeviceDetil>
     )
 
     fun getDatastreams(
+            callback:LocalCallBack<List<Datastreams>>,
             deviceId:String,
-            datastreamIds:Array<String>?=null,
-            callback:LocalCallBack<DatastreamsWraper>
+            datastreamIds:Array<String>?=null
     )
 
 
     fun getDatastream(
             deviceId:String,
-            callback:LocalCallBack<DataSingleWraper>,
-            streamId:String?
+            callback:LocalCallBack<Datastreams>,
+            streamId:String
     )
 
     fun sendToEdp(
             deviceId:String,
             command:String,
-            callback: LocalCallBack<Nothing>
+            callback: LocalCallBack<Unit>
     )
 
 

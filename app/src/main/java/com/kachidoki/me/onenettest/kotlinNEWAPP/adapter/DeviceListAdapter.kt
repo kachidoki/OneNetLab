@@ -3,6 +3,7 @@ package com.kachidoki.me.onenettest.kotlinNEWAPP.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.kachidoki.me.onenettest.databinding.ItemKdevicelistBinding
+import com.kachidoki.me.onenettest.kotlinNEWAPP.activity.KDeviceDetilActivity
 import com.kachidoki.me.onenettest.kotlinNEWAPP.bean.DeviceList
 
 /**
@@ -30,6 +31,9 @@ class DeviceListAdapter(private val list:MutableList<DeviceList>):BaseBindingAda
         holder.binding.devicelist=list.get(position)
         holder.binding.executePendingBindings()
         holder.binding.devicepoint=100
+        holder.itemView.setOnClickListener {
+            KDeviceDetilActivity.GoKDeviceDetilActivity(list[position].id,holder.itemView.context)
+        }
     }
 
     override fun getItemCount() = list.size

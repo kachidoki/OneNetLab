@@ -18,32 +18,67 @@ class OneNetModel
         private val gosn:Gson):OneNetLocalApi{
     override fun getDevices(callback: LocalCallBack<DeviceListWrapper>,page: String?, perpage: String?, keyWords: String?, tag: String?, online: String?, isPrivate: String?) {
         onenet.getDevices(API.APIKey,page,perpage,keyWords,tag,online,isPrivate,object : ResponseListener{
-            override fun onResponse(p0: OneNetResponse?) {
-                val res:DeviceListWrapper=gosn.fromJson(p0!!.data,DeviceListWrapper::class.java)
+            override fun onResponse(p0: OneNetResponse) {
+                val res:DeviceListWrapper=gosn.fromJson(p0.data,DeviceListWrapper::class.java)
                 callback.OnSucceed(res)
             }
 
-            override fun onError(p0: OneNetError?) {
+            override fun onError(p0: OneNetError) {
                 callback.OnFail(p0)
             }
 
         })
     }
 
-    override fun getDevice(deviceId: String, callback: LocalCallBack<DeviceDetilWrapper>) {
+    override fun getDevice(deviceId: String, callback: LocalCallBack<DeviceDetil>) {
+        onenet.getDevice(API.APIKey,deviceId,object :ResponseListener{
+            override fun onResponse(p0: OneNetResponse) {
+                val res:DeviceDetilWrapper=gosn.fromJson(p0.rawResponse,DeviceDetilWrapper::class.java)
+                callback.OnSucceed(res.data)
+            }
 
+            override fun onError(p0: OneNetError) {
+                callback.OnFail(p0)
+            }
+        })
     }
 
-    override fun getDatastreams(deviceId: String, datastreamIds: Array<String>?, callback: LocalCallBack<DatastreamsWraper>) {
+    override fun getDatastreams(callback: LocalCallBack<List<Datastreams>>,deviceId: String, datastreamIds: Array<String>?) {
+        onenet.getDatastreams(API.APIKey,deviceId,datastreamIds,object :ResponseListener{
+            override fun onResponse(p0: OneNetResponse) {
+                val res:DatastreamsWraper=gosn.fromJson(p0.rawResponse,DatastreamsWraper::class.java)
+                callback.OnSucceed(res.data)
+            }
 
+            override fun onError(p0: OneNetError) {
+                callback.OnFail(p0)
+            }
+        })
     }
 
-    override fun getDatastream(deviceId: String, callback: LocalCallBack<DataSingleWraper>, streamId: String?) {
+    override fun getDatastream(deviceId: String, callback: LocalCallBack<Datastreams>, streamId: String) {
+        onenet.getDatastream(API.APIKey,deviceId,streamId,object :ResponseListener{
+            override fun onResponse(p0: OneNetResponse) {
+                val res:DataSingleWraper=gosn.fromJson(p0.data,DataSingleWraper::class.java)
+                callback.OnSucceed(res.data)
+            }
 
+            override fun onError(p0: OneNetError) {
+                callback.OnFail(p0)
+            }
+        })
     }
 
-    override fun sendToEdp(deviceId: String, command: String, callback: LocalCallBack<Nothing>) {
+    override fun sendToEdp(deviceId: String, command: String, callback: LocalCallBack<Unit>) {
+        onenet.sendToEdp(API.APIKey,deviceId,command,object :ResponseListener{
+            override fun onResponse(p0: OneNetResponse) {
+                callback.OnSucceed(Unit)
+            }
 
+            override fun onError(p0: OneNetError) {
+                callback.OnFail(p0)
+            }
+        })
     }
 
     override fun getDataPoints(deviceId: String, datastreamId: String, start: String?, end: String?, limit: String?, cursor: String?, duration: String?, callback: LocalCallBack<DataPointsWrapper>) {
