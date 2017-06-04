@@ -1,5 +1,6 @@
 package com.kachidoki.me.onenettest.kotlinNEWAPP.presenter.Contract
 
+import android.content.Context
 import com.kachidoki.me.onenettest.kotlinNEWAPP.bean.Datastreams
 import com.kachidoki.me.onenettest.kotlinNEWAPP.bean.DeviceDetil
 
@@ -13,12 +14,15 @@ interface DeviceDetilContract{
         fun getDetil(deviceId:String)
 
         fun sendCommand(deviceId: String,command:String)
+
     }
 
     interface View{
         fun showDetil(detil:DeviceDetil)
 
         fun showIsOpen(isOpen:Boolean)
+
+        fun showPop(v: android.view.View, context: Context)
 
         fun showStreams(res:List<Datastreams>)
 

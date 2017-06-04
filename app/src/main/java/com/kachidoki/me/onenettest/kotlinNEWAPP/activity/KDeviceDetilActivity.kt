@@ -5,6 +5,12 @@ import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.text.InputType
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.PopupWindow
+import com.afollestad.materialdialogs.MaterialDialog
 import com.kachidoki.me.onenettest.R
 import com.kachidoki.me.onenettest.databinding.ActivityKdeviceDetilBinding
 import com.kachidoki.me.onenettest.kotlinNEWAPP.Di.module.DeviceDetilModule
@@ -16,6 +22,7 @@ import com.kachidoki.me.onenettest.kotlinNEWAPP.bean.Datastreams
 import com.kachidoki.me.onenettest.kotlinNEWAPP.bean.DeviceDetil
 import com.kachidoki.me.onenettest.kotlinNEWAPP.presenter.Contract.DeviceDetilContract
 import com.kachidoki.me.onenettest.kotlinNEWAPP.presenter.DeviceDetilPresenter
+import kotlinx.android.synthetic.main.pop_list.view.*
 import javax.inject.Inject
 
 /**
@@ -31,6 +38,7 @@ class KDeviceDetilActivity:KBaseActivity<ActivityKdeviceDetilBinding>(),DeviceDe
         getApiComponent().plus(DeviceDetilModule(this)).inject(this)
         adapter= DeviceDetilAdapter(ArrayList<Datastreams>())
         with(mBinding!!){
+            mBinding.view=this@KDeviceDetilActivity
             mBinding.KdeviceDetilRecyclerview.adapter=adapter
             mBinding.KdeviceDetilRecyclerview.setLayoutManager(LinearLayoutManager(this@KDeviceDetilActivity))
             mBinding.KdeviceDetilRecyclerview.setRefreshListener {
@@ -69,6 +77,29 @@ class KDeviceDetilActivity:KBaseActivity<ActivityKdeviceDetilBinding>(),DeviceDe
 
     override fun showFail(e: Exception) {
         toast("发送失败")
+    }
+
+    override fun showPop(v:View,context: Context){
+        val content:View=LayoutInflater.from(context).inflate(R.layout.pop_list,null)
+        content.pop_wifi.setOnClickListener { showSetWifi(context) }
+        content.pop_clock.setOnClickListener { showSetColck(context) }
+        val pop:PopupWindow= PopupWindow(content,ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT,true)
+        pop.showAsDropDown(v)
+    }
+
+    fun showSetWifi(context: Context){
+        MaterialDialog.Builder(context)
+                .title("设置wifi")
+                .content("输入wifi名")
+                .inputType(InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PERSON_NAME or InputType.TYPE_TEXT_FLAG_CAP_WORDS)
+                .inputRange(2,12)
+                .positiveText("确定")
+                .onPositive { dialog, which -> dialog.dismiss() }
+                .show()
+    }
+
+    fun showSetColck(context: Context){
+
     }
 
     companion object{

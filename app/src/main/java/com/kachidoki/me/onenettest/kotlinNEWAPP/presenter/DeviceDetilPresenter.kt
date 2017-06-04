@@ -16,7 +16,6 @@ class DeviceDetilPresenter
                     , private val view:DeviceDetilContract.View)
     :DeviceDetilContract.Presenter {
 
-
     override fun getDetil(deviceId: String) {
         model.getDevice(deviceId,object :LocalCallBack<DeviceDetil>{
             override fun OnSucceed(t: DeviceDetil) {

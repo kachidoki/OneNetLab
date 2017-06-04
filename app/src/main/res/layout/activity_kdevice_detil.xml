@@ -12,6 +12,9 @@
         <variable
             name="safe"
             type="String" />
+        <variable
+            name="view"
+            type="com.kachidoki.me.onenettest.kotlinNEWAPP.presenter.Contract.DeviceDetilContract.View" />
     </data>
 
 
@@ -56,6 +59,7 @@
                     android:layout_height="30dp"
                     android:layout_gravity="right"
                     android:layout_marginRight="10dp"
+                    android:onClick="@{(v)->view.showPop(v,context)}"
                     android:padding="2dp"
                     android:src="@drawable/more" />
             </FrameLayout>
