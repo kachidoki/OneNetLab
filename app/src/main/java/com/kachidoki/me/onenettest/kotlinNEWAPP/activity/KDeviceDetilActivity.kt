@@ -1,16 +1,20 @@
 package com.kachidoki.me.onenettest.kotlinNEWAPP.activity
 
+import android.app.AlertDialog
+import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.text.InputType
+import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupWindow
 import com.afollestad.materialdialogs.MaterialDialog
+import com.kachidoki.me.onenettest.OLDAPP.config.API
 import com.kachidoki.me.onenettest.R
 import com.kachidoki.me.onenettest.databinding.ActivityKdeviceDetilBinding
 import com.kachidoki.me.onenettest.kotlinNEWAPP.Di.module.DeviceDetilModule
@@ -22,6 +26,7 @@ import com.kachidoki.me.onenettest.kotlinNEWAPP.bean.Datastreams
 import com.kachidoki.me.onenettest.kotlinNEWAPP.bean.DeviceDetil
 import com.kachidoki.me.onenettest.kotlinNEWAPP.presenter.Contract.DeviceDetilContract
 import com.kachidoki.me.onenettest.kotlinNEWAPP.presenter.DeviceDetilPresenter
+import kotlinx.android.synthetic.main.dialog_wifi.view.*
 import kotlinx.android.synthetic.main.pop_list.view.*
 import javax.inject.Inject
 
@@ -88,18 +93,41 @@ class KDeviceDetilActivity:KBaseActivity<ActivityKdeviceDetilBinding>(),DeviceDe
     }
 
     fun showSetWifi(context: Context){
-        MaterialDialog.Builder(context)
-                .title("设置wifi")
-                .content("输入wifi名")
-                .inputType(InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PERSON_NAME or InputType.TYPE_TEXT_FLAG_CAP_WORDS)
-                .inputRange(2,12)
-                .positiveText("确定")
-                .onPositive { dialog, which -> dialog.dismiss() }
-                .show()
+        val v:View=LayoutInflater.from(context).inflate(R.layout.dialog_wifi,null)
+        val dialog:AlertDialog=AlertDialog.Builder(context)
+                .setTitle("设置Wifi")
+                .setView(v)
+                .setNegativeButton("取消",null)
+                .setPositiveButton("确定",null)
+                .create()
+        dialog.show()
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+            if (!TextUtils.isEmpty(v.wifi_name.editText!!.text.toString())&&!TextUtils.isEmpty(v.wifi_psw.editText!!.text.toString())){
+                presenter.sendCommand(deviceID,API.COMMAND_WIFI(v.wifi_name.editText!!.text.toString(),v.wifi_psw.editText!!.text.toString()))
+                dialog.dismiss()
+            }else{
+                if (TextUtils.isEmpty(v.wifi_name.editText!!.text.toString())) v.wifi_name.error="请输入wifi名"
+                if (TextUtils.isEmpty(v.wifi_psw.editText!!.text.toString())) v.wifi_psw.error="请输入wifi名"
+            }
+        }
+
     }
 
     fun showSetColck(context: Context){
-
+        MaterialDialog.Builder(context)
+                .title("设置定时关闭")
+                .content("请输入时间/分钟")
+                .inputType(InputType.TYPE_CLASS_NUMBER)
+                .input("分钟",null,false,{dialog, input ->
+                    val time=input.toString().toInt()
+                    presenter.sendCommand(deviceID,API.COMMAND_TIME(time))
+                })
+                .positiveText("确定")
+                .negativeText("取消")
+                .onNegative { dialog, which -> toast("negative")}
+                .neutralText("取消定时")
+                .onNeutral { dialog, which -> presenter.sendCommand(deviceID,API.COMMAND_CANCELTIME) }
+                .show()
     }
 
     companion object{
