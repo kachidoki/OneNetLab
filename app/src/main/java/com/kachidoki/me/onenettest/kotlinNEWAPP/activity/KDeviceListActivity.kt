@@ -44,6 +44,11 @@ class KDeviceListActivity : KBaseActivity<ActivityKdeviceListBinding>() ,DeviceL
         mBinding.count=res.size
     }
 
+    override fun showsafe(map: Map<String, Int>) {
+        adapter.setSafe(map)
+    }
+
+
     override fun failData(e: Exception) {
         toast(e.toString())
     }

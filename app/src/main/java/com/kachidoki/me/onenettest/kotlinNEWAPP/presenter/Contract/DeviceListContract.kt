@@ -9,6 +9,7 @@ interface DeviceListContract{
     interface View{
         fun setData(res:List<DeviceList>)
         fun failData(e:Exception)
+        fun showsafe(map:Map<String,Int>)
     }
 
     interface Presenter{

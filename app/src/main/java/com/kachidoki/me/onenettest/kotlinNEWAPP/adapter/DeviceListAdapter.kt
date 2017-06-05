@@ -11,6 +11,14 @@ import com.kachidoki.me.onenettest.kotlinNEWAPP.bean.DeviceList
  */
 class DeviceListAdapter(private val list:MutableList<DeviceList>):BaseBindingAdapter<ItemKdevicelistBinding>(){
 
+    val safe = mutableMapOf<String,Int>()
+
+    fun setSafe(map:Map<String,Int>){
+        safe.clear()
+        safe.putAll(map)
+        notifyDataSetChanged()
+    }
+
     fun clear(){
         list.clear()
     }
@@ -29,8 +37,10 @@ class DeviceListAdapter(private val list:MutableList<DeviceList>):BaseBindingAda
 
     override fun onBindViewHolder(holder: DBViewHolder<ItemKdevicelistBinding>, position: Int) {
         holder.binding.devicelist=list.get(position)
+        if (!safe.isEmpty()){
+            holder.binding.devicepoint=safe.get(list[position].id)?:0
+        }
         holder.binding.executePendingBindings()
-        holder.binding.devicepoint=100
         holder.itemView.setOnClickListener {
             KDeviceDetilActivity.GoKDeviceDetilActivity(list[position].id,holder.itemView.context)
         }

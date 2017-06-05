@@ -63,7 +63,7 @@ class OneNetModel
     override fun getDatastream(deviceId: String, streamId: String, callback: LocalResponse<Datastreams>) {
         onenet.getDatastream(API.APIKey,deviceId,streamId,object :ResponseListener{
             override fun onResponse(p0: OneNetResponse) {
-                val res:DataSingleWraper=gosn.fromJson(p0.data,DataSingleWraper::class.java)
+                val res:DataSingleWraper=gosn.fromJson(p0.rawResponse,DataSingleWraper::class.java)
                 callback.s(res.data)
             }
 
