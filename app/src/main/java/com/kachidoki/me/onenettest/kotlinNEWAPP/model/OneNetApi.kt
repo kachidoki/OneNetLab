@@ -8,7 +8,7 @@ import com.kachidoki.me.onenettest.kotlinNEWAPP.bean.*
  */
 interface OneNetLocalApi{
     fun getDevices(
-            callback:LocalCallBack<DeviceListWrapper>,
+            callback:LocalResponse<DeviceListWrapper>,
             page:String?=null,
             perpage:String?=null,
             keyWords:String?=null,
@@ -19,11 +19,11 @@ interface OneNetLocalApi{
 
     fun getDevice(
             deviceId:String,
-            callback:LocalCallBack<DeviceDetil>
+            callback:LocalResponse<DeviceDetil>
     )
 
     fun getDatastreams(
-            callback:LocalCallBack<List<Datastreams>>,
+            callback:LocalResponse<List<Datastreams>>,
             deviceId:String,
             datastreamIds:Array<String>?=null
     )
@@ -31,14 +31,14 @@ interface OneNetLocalApi{
 
     fun getDatastream(
             deviceId:String,
-            callback:LocalCallBack<Datastreams>,
-            streamId:String
+            streamId:String,
+            callback:LocalResponse<Datastreams>
     )
 
     fun sendToEdp(
             deviceId:String,
             command:String,
-            callback: LocalCallBack<Unit>
+            callback: LocalResponse<Unit>
     )
 
 
@@ -50,14 +50,10 @@ interface OneNetLocalApi{
             limit:String?=null,
             cursor:String?=null,
             duration:String?=null,
-            callback:LocalCallBack<DataPointsWrapper>
+            callback:LocalResponse<DataPointsWrapper>
     )
 
 
 }
 
-
-interface LocalCallBack<T>{
-    fun OnSucceed(t:T)
-    fun OnFail(e:Exception?)
-}
+class LocalResponse<T>(val s:(T)->Unit, val e:(Exception)->Unit)

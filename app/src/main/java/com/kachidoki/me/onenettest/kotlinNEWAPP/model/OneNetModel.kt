@@ -16,72 +16,76 @@ class OneNetModel
 @Inject constructor(
         private val onenet:OneNetApi,
         private val gosn:Gson):OneNetLocalApi{
-    override fun getDevices(callback: LocalCallBack<DeviceListWrapper>,page: String?, perpage: String?, keyWords: String?, tag: String?, online: String?, isPrivate: String?) {
+
+
+    override fun getDevices(callback: LocalResponse<DeviceListWrapper>, page: String?, perpage: String?, keyWords: String?, tag: String?, online: String?, isPrivate: String?) {
         onenet.getDevices(API.APIKey,page,perpage,keyWords,tag,online,isPrivate,object : ResponseListener{
             override fun onResponse(p0: OneNetResponse) {
                 val res:DeviceListWrapper=gosn.fromJson(p0.data,DeviceListWrapper::class.java)
-                callback.OnSucceed(res)
+                callback.s(res)
             }
 
             override fun onError(p0: OneNetError) {
-                callback.OnFail(p0)
+                callback.e(p0)
             }
 
         })
     }
 
-    override fun getDevice(deviceId: String, callback: LocalCallBack<DeviceDetil>) {
+    override fun getDevice(deviceId: String, callback: LocalResponse<DeviceDetil>) {
         onenet.getDevice(API.APIKey,deviceId,object :ResponseListener{
             override fun onResponse(p0: OneNetResponse) {
                 val res:DeviceDetilWrapper=gosn.fromJson(p0.rawResponse,DeviceDetilWrapper::class.java)
-                callback.OnSucceed(res.data)
+                callback.s(res.data)
             }
 
             override fun onError(p0: OneNetError) {
-                callback.OnFail(p0)
+                callback.e(p0)
             }
         })
     }
 
-    override fun getDatastreams(callback: LocalCallBack<List<Datastreams>>,deviceId: String, datastreamIds: Array<String>?) {
+
+    override fun getDatastreams(callback: LocalResponse<List<Datastreams>>, deviceId: String, datastreamIds: Array<String>?) {
         onenet.getDatastreams(API.APIKey,deviceId,datastreamIds,object :ResponseListener{
             override fun onResponse(p0: OneNetResponse) {
                 val res:DatastreamsWraper=gosn.fromJson(p0.rawResponse,DatastreamsWraper::class.java)
-                callback.OnSucceed(res.data)
+                callback.s(res.data)
             }
 
             override fun onError(p0: OneNetError) {
-                callback.OnFail(p0)
+                callback.e(p0)
             }
         })
     }
 
-    override fun getDatastream(deviceId: String, callback: LocalCallBack<Datastreams>, streamId: String) {
+
+    override fun getDatastream(deviceId: String, streamId: String, callback: LocalResponse<Datastreams>) {
         onenet.getDatastream(API.APIKey,deviceId,streamId,object :ResponseListener{
             override fun onResponse(p0: OneNetResponse) {
                 val res:DataSingleWraper=gosn.fromJson(p0.data,DataSingleWraper::class.java)
-                callback.OnSucceed(res.data)
+                callback.s(res.data)
             }
 
             override fun onError(p0: OneNetError) {
-                callback.OnFail(p0)
+                callback.e(p0)
             }
         })
     }
 
-    override fun sendToEdp(deviceId: String, command: String, callback: LocalCallBack<Unit>) {
+    override fun sendToEdp(deviceId: String, command: String, callback: LocalResponse<Unit>) {
         onenet.sendToEdp(API.APIKey,deviceId,command,object :ResponseListener{
             override fun onResponse(p0: OneNetResponse) {
-                callback.OnSucceed(Unit)
+                callback.s(Unit)
             }
 
             override fun onError(p0: OneNetError) {
-                callback.OnFail(p0)
+                callback.e(p0)
             }
         })
     }
 
-    override fun getDataPoints(deviceId: String, datastreamId: String, start: String?, end: String?, limit: String?, cursor: String?, duration: String?, callback: LocalCallBack<DataPointsWrapper>) {
+    override fun getDataPoints(deviceId: String, datastreamId: String, start: String?, end: String?, limit: String?, cursor: String?, duration: String?, callback: LocalResponse<DataPointsWrapper>) {
 
     }
 
