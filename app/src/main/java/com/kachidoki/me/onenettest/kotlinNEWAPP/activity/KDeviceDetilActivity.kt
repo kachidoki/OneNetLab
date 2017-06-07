@@ -40,7 +40,7 @@ class KDeviceDetilActivity:KBaseActivity<ActivityKdeviceDetilBinding>(),DeviceDe
 
     override fun initView() {
         getApiComponent().plus(DeviceDetilModule(this)).inject(this)
-        adapter= DeviceDetilAdapter(ArrayList<Datastreams>())
+        adapter= DeviceDetilAdapter(ArrayList<Datastreams>(),deviceID)
         with(mBinding!!){
             mBinding.view=this@KDeviceDetilActivity
             mBinding.KdeviceDetilRecyclerview.adapter=adapter
