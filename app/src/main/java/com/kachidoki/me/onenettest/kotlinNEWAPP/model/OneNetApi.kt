@@ -56,4 +56,4 @@ interface OneNetLocalApi{
 
 }
 
-class LocalResponse<T>(val s:(T)->Unit, val e:(Exception)->Unit)
+open class LocalResponse<T>(val s:(T)->Unit, val e:(Exception)->Unit)
