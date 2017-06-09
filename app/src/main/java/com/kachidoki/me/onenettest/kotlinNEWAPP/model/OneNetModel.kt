@@ -12,7 +12,7 @@ import javax.inject.Inject
 /**
  * Created by Kachidoki on 2017/6/1.
  */
-class OneNetModel
+open class OneNetModel
 @Inject constructor(
         private val onenet:OneNetApi,
         private val gosn:Gson):OneNetLocalApi{

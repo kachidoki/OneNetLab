@@ -44,8 +44,7 @@ class KModelApiTest{
 
     val deviceId:String = "123123"
 
-    val detil:DeviceDetil = DeviceDetil("123",false,"123","345","123124","asdasf", Binary("123","sds",1,"dsf"), emptyArray(), Location(123.2F,123.3F,345.4F),"asgtrvb"
-    ,"asfvbr", Key("asdasf","dgs"), emptyList())
+
 
     @Before
     fun setUp(){
